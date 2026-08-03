@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intro Me — Self-Introduction Generator</title>
+<style>
+  :root{
+    --bg:#0f1220;
+    --card:#171a2b;
+    --card2:#1e2238;
+    --line:#2a2f4a;
+    --text:#e9ecf5;
+    --muted:#9aa2c0;
+    --accent:#6d8bff;
+    --accent2:#8f6dff;
+    --ok:#31d09a;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 20% -10%,#20264a 0%,transparent 60%),var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:32px 16px 64px;
+  }
+  .wrap{max-width:820px;margin:0 auto}
+  header{text-align:center;margin-bottom:28px}
+  h1{
+    font-size:34px;margin:0 0 6px;letter-spacing:-.5px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  header p{color:var(--muted);margin:0;font-size:15px}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px;
+    box-shadow:0 20px 50px -30px rgba(0,0,0,.8);
+  }
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  label{font-size:13px;color:var(--muted);font-weight:600}
+  input,select,textarea{
+    background:var(--card2);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:10px;
+    padding:11px 13px;
+    font-size:15px;
+    outline:none;
+    transition:border-color .15s,box-shadow .15s;
+    font-family:inherit;
+  }
+  input:focus,select:focus,textarea:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(109,139,255,.15);
+  }
+  textarea{resize:vertical;min-height:64px}
+  .row-btn{margin-top:20px;display:flex;gap:12px;flex-wrap:wrap}
+  button{
+    font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;
+    border:none;border-radius:10px;padding:12px 20px;color:#fff;
+    transition:transform .08s,filter .15s;
+  }
+  button:active{transform:translateY(1px)}
+  .primary{background:linear-gradient(90deg,var(--accent),var(--accent2));flex:1;min-width:180px}
+  .ghost{background:var(--card2);border:1px solid var(--line);color:var(--muted)}
+  .primary:hover{filter:brightness(1.08)}
+  .results{margin-top:28px;display:flex;flex-direction:column;gap:14px}
+  .results h2{font-size:15px;color:var(--muted);font-weight:600;margin:0 0 2px}
+  .line{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:16px 16px 16px 18px;
+    display:flex;gap:14px;align-items:flex-start;
+    position:relative;
+    animation:pop .25s ease both;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .line p{margin:0;line-height:1.55;font-size:15.5px;flex:1}
+  .copy{
+    background:var(--card2);border:1px solid var(--line);color:var(--muted);
+    font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:8px;white-space:nowrap;
+  }
+  .copy.done{color:var(--ok);border-color:var(--ok)}
+  .empty{color:var(--muted);text-align:center;padding:24px;font-size:14.5px}
+  .tag{display:inline-block;font-size:11px;color:var(--muted);border:1px solid var(--line);
+    border-radius:999px;padding:2px 9px;margin-bottom:8px}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:28px}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Intro Me</h1>
+    <p>Fill in a few details and get polished self-introduction lines you can copy.</p>
+  </header>
+
+  <div class="card">
+    <div class="grid">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input id="name" placeholder="e.g. Priya Sharma" />
+      </div>
+      <div class="field">
+        <label for="role">Job / role <span style="color:var(--accent)">*</span></label>
+        <input id="role" placeholder="e.g. Product Designer" />
+      </div>
+      <div class="field">
+        <label for="org">Company / field <span style="color:var(--muted)">(optional)</span></label>
+        <input id="org" placeholder="e.g. a fintech startup" />
+      </div>
+      <div class="field">
+        <label for="years">Years of experience <span style="color:var(--muted)">(optional)</span></label>
+        <input id="years" type="number" min="0" placeholder="e.g. 6" />
+      </div>
+      <div class="field full">
+        <label for="skill">Key strength or focus <span style="color:var(--muted)">(optional)</span></label>
+        <input id="skill" placeholder="e.g. turning complex problems into simple interfaces" />
+      </div>
+      <div class="field">
+        <label for="tone">Tone</label>
+        <select id="tone">
+          <option value="professional" selected>Professional &amp; polished</option>
+          <option value="friendly">Friendly &amp; warm</option>
+          <option value="confident">Bold &amp; confident</option>
+          <option value="concise">Short &amp; concise</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="context">Where is this for?</label>
+        <select id="context">
+          <option value="general" selected>General / networking</option>
+          <option value="linkedin">LinkedIn / profile bio</option>
+          <option value="meeting">Meeting or event intro</option>
+          <option value="email">Cold email opener</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row-btn">
+      <button class="primary" onclick="generate()">Generate my intro lines</button>
+      <button class="ghost" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="empty">Your generated lines will appear here.</div>
+  </div>
+
+  <footer>Everything runs in your browser — nothing is sent anywhere.</footer>
+</div>
+
+<script>
+function val(id){return document.getElementById(id).value.trim();}
+
+function cap(s){return s ? s.charAt(0).toUpperCase()+s.slice(1) : s;}
+
+function generate(){
+  const name  = val('name');
+  const role  = val('role');
+  const org   = val('org');
+  const years = val('years');
+  const skill = val('skill');
+  const tone  = val('tone');
+  const ctx   = val('context');
+
+  const results = document.getElementById('results');
+
+  if(!role){
+    results.innerHTML = '<div class="empty">Please add your job or role — that\'s the one required field.</div>';
+    return;
+  }
+
+  const N = name || '';
+  const R = role;
+  const orgPhrase   = org   ? (/(industry|field|sector|space|world of)/i.test(org) ? ('in ' + org) : ('at ' + org)) : '';
+  const orgAt       = org   ? ('at ' + org) : '';
+  const yearsPhrase = years ? (years + '+ years' ) : '';
+  const skillLC     = skill ? skill.replace(/^i\s+/i,'').replace(/\.$/,'') : '';
+  const art         = /^[aeiou]/i.test(R) ? 'an' : 'a';
+  const Art         = cap(art);
+
+  let lines = [];
+
+  if(tone==='professional'){
+    lines.push(`${N?('Hi, I\u2019m '+N+'. '):''}I\u2019m ${art} ${R}${orgPhrase?(' '+orgPhrase):''}${yearsPhrase?(', with '+yearsPhrase+' of experience'):''}.${skillLC?(' I focus on '+skillLC+'.'):''}`);
+    lines.push(`${N?(N+' \u2014 '):''}${cap(R)}${yearsPhrase?(' with '+yearsPhrase+' in the field'):''}.${skillLC?(' Known for '+skillLC+'.'):''}${orgAt?(' Currently '+orgAt+'.'):''}`);
+    lines.push(`As ${art} ${R}${orgPhrase?(' '+orgPhrase):''}, I ${skillLC?('help teams with '+skillLC):'bring a practical, results-driven approach to my work'}.${N?(' Feel free to call me '+N+'.'):''}`);
+  } else if(tone==='friendly'){
+    lines.push(`${N?('Hey! I\u2019m '+N+'. '):'Hey there! '}I work as ${art} ${R}${orgPhrase?(' '+orgPhrase):''}${yearsPhrase?(' and have been at it for '+yearsPhrase):''}.${skillLC?(' I really enjoy '+gerund(skillLC)+'.'):''}`);
+    lines.push(`${N?('I\u2019m '+N+', '+art+' '):'I\u2019m '+art+' '}${R} who loves what I do.${orgAt?(' You\u2019ll find me '+orgAt+' these days.'):''}${skillLC?(' Lately I\u2019m all about '+skillLC+'.'):''}`);
+    lines.push(`${N?(N+' here \u2014 '):''}${R} by day${skillLC?(', happiest when I\u2019m '+gerund(skillLC)):''}.${yearsPhrase?(' Been doing this for '+yearsPhrase+' now.'):''}`);
+  } else if(tone==='confident'){
+    lines.push(`${N?('I\u2019m '+N+'. '):''}${Art} ${R}${yearsPhrase?(' with '+yearsPhrase+' of proven experience'):''}${orgPhrase?(' '+orgPhrase):''}.${skillLC?(' I\u2019m the person you want when it comes to '+skillLC+'.'):''}`);
+    lines.push(`${cap(R)}${orgAt?(' '+orgAt):''}${yearsPhrase?(', '+yearsPhrase+' in'):''}.${skillLC?(' I turn '+skillLC+' into real results.'):' I get things done.'}${N?(' \u2014 '+N):''}`);
+    lines.push(`${N?(N+'. '):''}I don\u2019t just work as ${art} ${R} \u2014 I ${skillLC?('specialise in '+skillLC):'set the standard for the work I do'}.${yearsPhrase?(' '+yearsPhrase+' and counting.'):''}`);
+  } else { // concise
+    lines.push(`${N?(N+' \u2014 '):''}${R}${org?(', '+org):''}${yearsPhrase?(' \u00b7 '+yearsPhrase):''}.`);
+    lines.push(`${R}${skillLC?(' focused on '+skillLC):''}.${N?(' \u2014 '+N):''}`);
+    lines.push(`${N?(N+', '):''}${R}${orgAt?(' '+orgAt):''}.`);
+  }
+
+  // Context-specific bonus line
+  if(ctx==='linkedin'){
+    lines.push(`${cap(R)}${orgPhrase?(' '+orgPhrase):''}${yearsPhrase?(' | '+yearsPhrase):''}${skillLC?(' | '+cap(skillLC)):''}`);
+  } else if(ctx==='meeting'){
+    lines.push(`Hi everyone, ${N?('I\u2019m '+N+' and '):''}I\u2019m ${art} ${R}${orgPhrase?(' '+orgPhrase):''}.${skillLC?(' I\u2019m here to help with '+skillLC+'.'):''} Great to meet you all.`);
+  } else if(ctx==='email'){
+    lines.push(`${N?('My name is '+N+' and '):''}I\u2019m ${art} ${R}${orgPhrase?(' '+orgPhrase):''}. I\u2019m reaching out because${skillLC?(' I work on '+skillLC+' and thought it might be relevant to you'):' I\u2019d love to connect'}.`);
+  }
+
+  // Clean up double spaces / stray punctuation
+  lines = lines.map(l => l.replace(/\s+/g,' ').replace(/\s+([.,])/g,'$1').replace(/\.\./g,'.').trim());
+
+  render(lines, tone, ctx);
+}
+
+function gerund(phrase){
+  // crude: if phrase starts with a base verb, keep as-is (assumes user wrote a noun/verb phrase)
+  return phrase;
+}
+
+function render(lines, tone, ctx){
+  const results = document.getElementById('results');
+  const toneLabel = {professional:'Professional',friendly:'Friendly',confident:'Confident',concise:'Concise'}[tone];
+  const ctxLabel  = {general:'Networking',linkedin:'LinkedIn',meeting:'Meeting',email:'Cold email'}[ctx];
+  let html = '<h2>Your intro lines</h2>';
+  lines.forEach((line,i)=>{
+    const safe = line.replace(/"/g,'&quot;');
+    const esc  = line.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    html += `<div class="line" style="animation-delay:${i*60}ms">
+      <p>${esc}</p>
+      <button class="copy" onclick="copyLine(this,\`${safe.replace(/`/g,'\\`')}\`)">Copy</button>
+    </div>`;
+  });
+  html += `<div style="text-align:center;margin-top:4px">
+     <span class="tag">${toneLabel}</span> <span class="tag">${ctxLabel}</span>
+     <button class="ghost" style="margin-left:8px;padding:8px 14px;font-size:13px" onclick="generate()">Regenerate</button>
+   </div>`;
+  results.innerHTML = html;
+}
+
+function copyLine(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied ✓';
+    btn.classList.add('done');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('done');},1500);
+  }).catch(()=>{
+    btn.textContent='Press Ctrl+C';
+  });
+}
+
+function clearForm(){
+  ['name','role','org','years','skill'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tone').value='professional';
+  document.getElementById('context').value='general';
+  document.getElementById('results').innerHTML='<div class="empty">Your generated lines will appear here.</div>';
+  document.getElementById('name').focus();
+}
+
+// Allow Enter to generate
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && ['name','role','org','years','skill'].includes(document.activeElement.id)){
+    generate();
+  }
+});
+</script>
+</body>
+</html>
